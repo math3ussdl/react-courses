@@ -1,26 +1,39 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FaSignInAlt } from 'react-icons/fa';
 import { useHistory } from 'react-router-dom';
 import Loader from '../../components/Loader';
+import api from '../../services/api';
+import { login } from '../../services/auth';
 import { BottomActions, Container, Form } from './styles';
 
 const Login: React.FC = () => {
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const history = useHistory();
 
-  const handleSignIn = (e: React.ChangeEvent<HTMLFormElement>) => {
+  const handleSignIn = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsLoading(true);
 
-    setTimeout(() => {
-      console.log('data', { email, password });
-      setIsLoading(false);
+    if (!email || !password) {
+      alert('Fill these required fields!');
+    } else {
+      setIsLoading(true);
+      try {
+        const response = await api.post('/sessions', { email, password });
 
-      history.push('/app');
-    }, 3000);
+        console.log('data', response);
+
+        setIsLoading(false);
+
+        login(response.data.token);
+        history.push('/app');
+      } catch (error) {
+        alert('Oops... Something went wrong!');
+      }
+    }
   };
 
   const handleReset = () => {

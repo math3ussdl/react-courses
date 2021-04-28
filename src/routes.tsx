@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
-import App from './App';
+import Dashboard from './pages/DashBoard';
 import Login from './pages/Login';
 import { isAuthenticated } from './services/auth';
 
@@ -27,7 +27,7 @@ const Routes = () => (
     <Switch>
       <Route exact path="/" component={Login} />
       <Route path="/signup" component={() => <h1>SignUp</h1>} />
-      <PrivateRoute path="/app" component={App} />
+      <PrivateRoute path="/app" component={Dashboard} />
       <Route path="*" component={() => <h1>Page not found</h1>} />
     </Switch>
   </BrowserRouter>
